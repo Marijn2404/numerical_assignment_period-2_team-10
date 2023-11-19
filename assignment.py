@@ -234,7 +234,7 @@ def lad_scatterplot():
     x_vals = np.linspace(min(x), max(x), 100)
     y_vals_lad = beta_lad[0] + beta_lad[1] * x_vals  # Calculating fitted values
     y_vals_ols = beta_ols[0] + beta_ols[1] * x_vals  # Calculating fitted values
-    plt.plot(x_vals, y_vals_lad, color='black', linestyle='-', label='Fitted regression line (LAD)')
+    plt.plot(x_vals, y_vals_lad, color='red', linestyle='--', label='Fitted regression line (LAD)')
     plt.plot(x_vals, y_vals_ols, color='black', linestyle='-', label='Fitted regression line (OLS)')
 
     plt.xlabel('x')
@@ -277,9 +277,7 @@ def ridge_M(X, alpha):
     k = X.shape[1]
     M = np.zeros((k,k))
     ## BEGIN ANSWER
-    # ...
-    # TODO: Add your code here
-    # ...
+    M = X.T @ X + alpha * np.identity(k)
     ## END ANSWER
     return M
 
@@ -288,9 +286,7 @@ def ridge_z(y, X):
     k = X.shape[1]
     z = np.zeros(k)
     ## BEGIN ANSWER
-    # ...
-    # TODO: Add your code here
-    # ...
+    z = X.T @ y
     ## END ANSWER
     return z
 
@@ -299,9 +295,10 @@ def ridge_estimator(y, X, alpha):
     k = X.shape[1]
     beta_ridge = np.zeros(k)
     ## BEGIN ANSWER
-    # ...
-    # TODO: Add your code here
-    # ...
+    M = ridge_M(X, alpha)
+    z = ridge_z(y, X)
+
+    beta_ridge = np.linalg.solve(M, z)
     ## END ANSWER
     return beta_ridge
 
@@ -311,9 +308,7 @@ def ridge_ev_decomp_XtX(X):
     w = np.zeros(k)
     V = np.zeros((k,k))
     ## BEGIN ANSWER
-    # ...
-    # TODO: Add your code here
-    # ...
+    w, V = np.linalg.eig(X.T @ X)
     ## END ANSWER
     return w, V
 
@@ -322,9 +317,9 @@ def ridge_Minv(X, alpha):
     k = X.shape[1]
     M_inv = np.zeros((k,k))
     ## BEGIN ANSWER
-    # ...
-    # TODO: Add your code here
-    # ...
+    w, V = ridge_ev_decomp_XtX(X)
+    w_hat = 1 / (w + alpha)
+    M_inv = V @ np.diag(w_hat) @ V.T
     ## END ANSWER
     return M_inv
 
@@ -333,9 +328,9 @@ def ridge_estimator_via_inv(y, X, alpha):
     k = X.shape[1]
     beta_ridge = np.zeros(k)
     ## BEGIN ANSWER
-    # ...
-    # TODO: Add your code here
-    # ...
+    M_inv = ridge_Minv(X, alpha)
+    z = ridge_z(y, X)
+    beta_ridge = M_inv @ z
     ## END ANSWER
     return beta_ridge
 
