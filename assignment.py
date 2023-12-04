@@ -40,7 +40,7 @@ def rng_cauchy(n, mu=0, sigma=1, seed=None):
     x = np.random.rand(n)
 
     # using inverse cdf of the cauchy distribution
-    # tnx wikipedia https://en.wikipedia.org/wiki/Cauchy_distribution#Cumulative_distribution_function_(CDF)
+    # tnx Wikipedia https://en.wikipedia.org/wiki/Cauchy_distribution#Cumulative_distribution_function_(CDF)
     x =  mu + sigma * np.tan(np.pi * (x - 0.5))
 
     ## END ANSWER
@@ -53,8 +53,8 @@ def rng_std_laplace(n, seed=None):
     x = np.zeros(n)
     ## BEGIN ANSWER
 
-    # We will use the value the Geogebra gave me :)
-    M = 3.62846451
+    # Tnx Wolfram alpha :) https://www.wolframalpha.com/input?i2d=true&i=%5C%2840%29Divide%5B1%2C2%5D%5C%2841%29*Power%5Be%2C%5C%2840%29-%7Cx%7C%5C%2841%29%5D*%CF%80*%5C%2840%291%2BPower%5Bx%2C2%5D%5C%2841%29
+    M = np.pi / 2
 
     i = 0
     while (i<n): # keep sampling until n draws are accepted
@@ -129,8 +129,6 @@ def ols_scatterplot():
     beta_ols = ols_estimator(y, x)
     plt.figure()
     ## BEGIN ANSWER
-        # Calculate OLS estimator
-    n = len(x)
     # Scatter plot of the data
     plt.scatter(x, y, label='Data points')
 
@@ -230,10 +228,12 @@ def lad_scatterplot():
     beta_lad = gradient_descent(sar, sar_grad, b0, y, x)
     plt.scatter(x, y, label='Data points')
 
-    # Fitted regression line
+    # Calculating values for the fitted regression line
     x_vals = np.linspace(min(x), max(x), 100)
-    y_vals_lad = beta_lad[0] + beta_lad[1] * x_vals  # Calculating fitted values
-    y_vals_ols = beta_ols[0] + beta_ols[1] * x_vals  # Calculating fitted values
+    y_vals_lad = beta_lad[0] + beta_lad[1] * x_vals  # Calculating LAD fitted values
+    y_vals_ols = beta_ols[0] + beta_ols[1] * x_vals  # Calculating OLS fitted values
+    
+    # Plotting values with given colour/style
     plt.plot(x_vals, y_vals_lad, color='red', linestyle='--', label='Fitted regression line (LAD)')
     plt.plot(x_vals, y_vals_ols, color='black', linestyle='-', label='Fitted regression line (OLS)')
 
